@@ -1,0 +1,35 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      project: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        project: {{ .Release.Name }}
+    spec:
+      containers:
+        - name : {{ .Release.Name }}-app
+          image: {{ .Values.container.image }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom: 
+                secretKeyRef:
+                  name: todo-secret
+                  key: db-url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: todo-secret
+                  key: db-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: todo-secret
+                  key: db-pass            

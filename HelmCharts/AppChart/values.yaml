@@ -1,0 +1,4 @@
+container:
+  image: elistarkhov/todoapp:1.0.1
+
+replicaCount: 2

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: todo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: "in-cluster"
+    namespace: todoapp
+  source:
+    path: "HelmCharts/AppChart"
+    repoURL: "git@github.com:elistarkhov/todoapp-argocd.git"
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
