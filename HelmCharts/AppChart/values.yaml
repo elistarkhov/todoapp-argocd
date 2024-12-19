@@ -1,4 +1,3 @@
 container:
-  image: elistarkhov/todoapp:1.0.1
-
+  image: elistarkhov/todoapp:1.0.3
 replicaCount: 2
