@@ -17,6 +17,20 @@ spec:
           image: {{ .Values.container.image }}
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            failureThreshold: 3
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom: 
@@ -32,4 +46,4 @@ spec:
               valueFrom: 
                 secretKeyRef:
                   name: todo-secret
-                  key: db-pass            
+                  key: db-pass
