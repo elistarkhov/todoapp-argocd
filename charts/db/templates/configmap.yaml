@@ -4,4 +4,4 @@ metadata:
   name: db-config
 data:
   db-name: {{ .Values.db.name }}
-  db-host: {{- printf "%s-svc:%d" .Release.Name .Values.db.svcPort }}
+  db-host: "{{- printf "%s-svc:%d" .Release.Name .Values.db.svcPort }}"
