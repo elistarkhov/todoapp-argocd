@@ -1,9 +1,9 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
+  name: {{ .Release.Name }}-deploy
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.app.replicaCount }}
   selector:
     matchLabels:
       project: {{ .Release.Name }}
@@ -14,35 +14,45 @@ spec:
     spec:
       containers:
         - name : {{ .Release.Name }}-app
-          image: {{ .Values.container.image }}
+          image: {{ .Values.app.image }}
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 800Mi
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 40
             periodSeconds: 30
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 40
+            initialDelaySeconds: 15
             periodSeconds: 30
             failureThreshold: 3
           env:
-            - name: SPRING_DATASOURCE_URL
+            - name: DB_HOST
               valueFrom: 
-                secretKeyRef:
-                  name: todo-secret
-                  key: db-url
-            - name: SPRING_DATASOURCE_USERNAME
+                configMapKeyRef:
+                  name: db-config
+                  key: db-host
+            - name: DB_NAME
+              valueFrom: 
+                configMapKeyRef:
+                  name: db-config
+                  key: db-name
+            - name: DB_USERNAME
               valueFrom: 
                 secretKeyRef:
                   name: todo-secret
                   key: db-user
-            - name: SPRING_DATASOURCE_PASSWORD
+            - name: DB_PASSWORD
               valueFrom: 
                 secretKeyRef:
                   name: todo-secret

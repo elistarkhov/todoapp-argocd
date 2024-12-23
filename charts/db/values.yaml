@@ -1,0 +1,5 @@
+db:
+  image: postgres:15.0-alpine
+  name: tododb
+  svcPort: 5432
+  replicaCount: 1

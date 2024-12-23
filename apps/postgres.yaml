@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: todo
+  name: postgres
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -10,7 +12,7 @@ spec:
     name: "in-cluster"
     namespace: todoapp
   source:
-    path: "HelmCharts/AppChart"
+    path: "charts/db"
     repoURL: "git@github.com:elistarkhov/todoapp-argocd.git"
     targetRevision: HEAD
     helm:
@@ -21,5 +23,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
