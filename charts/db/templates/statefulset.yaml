@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-sts
 spec:
-  replicas: {{ .Values.app.replicaCount }}
+  replicas: {{ .Values.db.replicaCount }}
   serviceName: {{ .Release.Name }}-svc
   selector:
     matchLabels:
