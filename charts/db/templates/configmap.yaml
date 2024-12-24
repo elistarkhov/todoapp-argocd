@@ -5,4 +5,4 @@ metadata:
 data:
   db-name: {{ .Values.db.name }}
   db-host: {{ .Release.Name }}-svc
-  db-port: {{ .Values.db.svcPort }}
+  db-port: {{ .Values.db.svcPort | quote }}
