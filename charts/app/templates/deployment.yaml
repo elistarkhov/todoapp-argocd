@@ -15,6 +15,7 @@ spec:
       containers:
         - name : {{ .Release.Name }}-app
           image: {{ .Values.app.image }}
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources:
@@ -42,6 +43,11 @@ spec:
                 configMapKeyRef:
                   name: db-config
                   key: db-host
+            - name: DB_PORT
+              valueFrom: 
+                configMapKeyRef:
+                  name: db-config
+                  key: db-port
             - name: DB_NAME
               valueFrom: 
                 configMapKeyRef:
