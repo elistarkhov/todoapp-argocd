@@ -10,7 +10,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/opt/pg/data"
+    path: /var/lib/docker/volumes/{{ .Release.Name }}-pv
 
 ---
 apiVersion: v1
