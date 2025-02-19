@@ -10,8 +10,16 @@ Repo structure:
 |   README.md
 +---apps --> argocd apps for todoapp and postgres
 |       postgres.yaml
-|       todoapp.yaml 
-\---charts
+|       todoapp.yaml
++---ansible --> playbook and configs for initial server setup
+|   |   ansible.cfg
+|   |   inventory
+|   |   server_setup.yaml
+|   |   
+|   \---group_vars
+|       \---demo
+|               vars.yaml
++---charts
     +---app --> helm templates and values for todoapp
     |   |   Chart.yaml
     |   |   values.yaml
@@ -26,6 +34,7 @@ Repo structure:
                 service.yaml
                 statefulset.yaml
                 volume.yaml
+
 
 ```
 

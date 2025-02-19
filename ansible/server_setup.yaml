@@ -1,0 +1,79 @@
+---
+- name: ServerSetup
+  become: yes
+  hosts: demo
+  tasks:
+    - name: Install epel
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install system packages
+      yum:
+        name:
+          - net-tools
+          - mc
+          - htop
+          - nano
+          - yum-utils
+          - bash-completion
+        state: present
+
+    - name: Add Docker GPG key
+      rpm_key:
+        state: present
+        key: "{{ docker_gpgkey_url }}"
+
+    - name: Add Docker repo
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker Repository
+        baseurl: "{{ docker_repo_url }}"
+        gpgcheck: yes
+        gpgkey: "{{ docker_gpgkey_url }}"
+        enabled: yes
+
+    - name: Install Docker
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+    
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Install kubectl
+      get_url:
+        url: "{{ kubectl_bin_url }}"
+        dest: /usr/local/bin/kubectl
+        mode: '0755'
+
+    - name: Install Minikube
+      get_url:
+        url: "{{ minikube_bin_url }}"
+        dest: /usr/local/bin/minikube
+        mode: '0755'
+
+    - name: Install ArgoCD
+      get_url:
+        url: "{{ argocd_bin_url }}"
+        dest: /usr/local/bin/argocd
+        mode: '0755'
+
+    - name: Create folder for volumes
+      file:
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: '0750'
+        path: /opt/argo/pv

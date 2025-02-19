@@ -1,0 +1,3 @@
+[demo]
+# replace with actual host
+cent99 ansible_host=192.168.100.99
